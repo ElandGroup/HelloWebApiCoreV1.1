@@ -26,7 +26,7 @@ namespace HelloWebApiCoreV2.Controllers
         {
             var fruitDtoList = await _fruitService.FruitQuery();
             if (fruitDtoList == null)
-                return this.NoContentEx();
+                return this.NotFoundEx();
             return this.OkEx(fruitDtoList);
         }
 
@@ -36,7 +36,7 @@ namespace HelloWebApiCoreV2.Controllers
         {
             var fruitDtoList = await _fruitService.FruitQuery(name);
             if (fruitDtoList == null)
-                return this.NoContentEx();
+                return this.NotFoundEx();
             return this.OkEx(fruitDtoList);
         }
 
@@ -93,7 +93,7 @@ namespace HelloWebApiCoreV2.Controllers
                 var fruit = _fruitService.FruitQuery(name);
                 if (fruit == null)
                 {
-                    return this.NoContentEx();
+                    return this.NotFoundEx();
                 }
 
                 _fruitService.FruitUpdate(fruitDto);

@@ -29,6 +29,10 @@ namespace HelloWebApiCoreV2.Common.ApiPack
         {
             return context.NoContentEx<string>();
         }
+        public static ObjectResult NotFoundEx(this Controller context)
+        {
+            return context.NotFoundEx<string>();
+        }
         public static ObjectResult ErrorEx(this Controller context, string errorMessage)
         {
             return context.ErrorEx<string>(errorMessage);
@@ -55,6 +59,16 @@ namespace HelloWebApiCoreV2.Common.ApiPack
         public static ObjectResult NoContentEx<T>(this Controller context)
         {
             return context.StatusCode((int)HttpStatusCode.NoContent
+                , new ApiResult<T>
+                {
+                    Success = true,
+                    Result = default(T),
+                    Error = null
+                });
+        }
+        public static ObjectResult NotFoundEx<T>(this Controller context)
+        {
+            return context.StatusCode((int)HttpStatusCode.NotFound
                 , new ApiResult<T>
                 {
                     Success = true,
