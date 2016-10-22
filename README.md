@@ -1,2 +1,2 @@
-# HelloWebApiCoreV1.1
+# HelloWebApiCoreV2
 api format
