@@ -84,7 +84,7 @@ namespace HelloWebApiCoreV2.Common.ApiPack
                 Result = default(T),
                 Error = new Dictionary<string, object>
                 {
-                    { "code" , 1 },
+                    { "code" , 10012 },
                     { "message" , "A required parameter is missing or doesn't have the right format:" + message}
                     , { "details",null}
                     , {"validationErrors",null }
@@ -100,7 +100,7 @@ namespace HelloWebApiCoreV2.Common.ApiPack
                     Result = default(T),
                     Error = new Dictionary<string, object>
                     {
-                        { "code" , 2 },
+                        { "code" , 10003 },
                         { "message" , errorMessage}
                         , { "details",null}
                         , {"validationErrors",null }
