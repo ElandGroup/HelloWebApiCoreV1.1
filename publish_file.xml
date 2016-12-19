@@ -1,0 +1,11 @@
+<project name="sample" default="compile">
+  <target name="config_file">
+    <if test="${property::exists('value')}">
+      <xmlpoke
+            file="${file}"
+            xpath="${xpath}"
+            value="${value}">
+      </xmlpoke>
+    </if>
+  </target>
+</project>
