@@ -94,7 +94,7 @@ namespace HelloWebApiCoreV2.Controllers
         }
 
         // POST api/v2/fruit/list
-        [HttpPost("{list}")]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody]List<FruitDto> fruitDtoList)
         {
             try
@@ -113,7 +113,7 @@ namespace HelloWebApiCoreV2.Controllers
 
         }
         // POST api/v2/fruit
-        [HttpPost]
+        [HttpPost("any")]
         public async Task<IActionResult> Post([FromBody]FruitDto fruitDto)
         {
             try
