@@ -19,7 +19,7 @@ namespace HelloApiWithCoreDapper.Context
         {
             get
             {
-                if (current != null)
+                if (current == null)
                 {
                     current = new ConnectContext();
                 }

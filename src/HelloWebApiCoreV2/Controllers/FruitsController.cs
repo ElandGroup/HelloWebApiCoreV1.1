@@ -86,7 +86,7 @@ namespace HelloWebApiCoreV2.Controllers
 
         // POST api/v2/fruit/list
         [HttpPost("{list}")]
-        public IActionResult Post([FromBody]List<FruitDto> fruitDtoList)
+        public async Task<IActionResult> Post([FromBody]List<FruitDto> fruitDtoList)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace HelloWebApiCoreV2.Controllers
                 {
                     return this.BadRequestEx("fruitDtoList");
                 }
-                _fruitService.FruitAdd(fruitDtoList);
+                await _fruitService.FruitAdd(fruitDtoList);
                 return this.CreatedEx();
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace HelloWebApiCoreV2.Controllers
         }
         // POST api/v2/fruit
         [HttpPost]
-        public IActionResult Post([FromBody]FruitDto fruitDto)
+        public async Task<IActionResult> Post([FromBody]FruitDto fruitDto)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace HelloWebApiCoreV2.Controllers
                 {
                     return this.BadRequestEx("fruitDto");
                 }
-                _fruitService.FruitAdd(new List<FruitDto>() { fruitDto });
+                await _fruitService.FruitAdd(new List<FruitDto>() { fruitDto });
                 return this.CreatedEx();
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace HelloWebApiCoreV2.Controllers
 
         // PUT api/v2/fruit/apple
         [HttpPut("{name}")]
-        public IActionResult Put(string name, [FromBody]FruitDto fruitDto)
+        public async Task<IActionResult> Put(string name, [FromBody]FruitDto fruitDto)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace HelloWebApiCoreV2.Controllers
                     return this.NotFoundEx();
                 }
 
-                _fruitService.FruitUpdate(fruitDto);
+                await _fruitService.FruitUpdate(fruitDto);
                 return this.NoContentEx();
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace HelloWebApiCoreV2.Controllers
 
         // DELETE api/v2/fruit/apple
         [HttpDelete("{name}")]
-        public IActionResult Delete(string name)
+        public async Task<IActionResult> Delete(string name)
         {
             try
             {
@@ -160,7 +160,7 @@ namespace HelloWebApiCoreV2.Controllers
                     return this.BadRequestEx("name");
                 }
 
-                _fruitService.FruitDelete(name);
+                await _fruitService.FruitDelete(name);
 
                 return this.NoContentEx();
             }
