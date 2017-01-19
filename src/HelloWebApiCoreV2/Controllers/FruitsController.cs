@@ -38,11 +38,20 @@ namespace HelloWebApiCoreV2.Controllers
                         { "message" , $"The number of queries must be smaller than ${MAXCOUNT}"}
                     });
                 }
+                string fields = Request.Query["fields"];
+
                 string sort = Request.Query["sort"];
                 sort = sort ?? "" ;
                 if (sort =="")
                 {
-                    sort = "code asc";
+                    if (!string.IsNullOrWhiteSpace(fields))
+                    {
+                        sort = fields.Substring(0, fields.IndexOf(",")) + " asc";
+                    }
+                    else {
+                        sort = "code asc";
+                    }
+                   
                 }
                 else if (sort.Substring(1, 1) == "-")
                 {
@@ -52,7 +61,7 @@ namespace HelloWebApiCoreV2.Controllers
                     sort = sort.Substring(0) + @" asc";
                 }
 
-                string fields = Request.Query["fields"];
+              
 
                 var fruitDtoList = await _fruitService.FruitQuery(fields,sort, skipCount, maxResultCount);
                 if (fruitDtoList == null)

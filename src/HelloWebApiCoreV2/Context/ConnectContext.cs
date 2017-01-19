@@ -49,11 +49,5 @@ namespace HelloApiWithCoreDapper.Context
             return connection;
         }
 
-
-
-
-
-
-
     }
 }
