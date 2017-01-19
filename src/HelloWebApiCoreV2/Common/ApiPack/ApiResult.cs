@@ -11,4 +11,8 @@ namespace HelloWebApiCoreV2.Common.ApiPack
         public T Result { get; set; }
         public IDictionary<string, object> Error { get; set; }
     }
+    public class ApiQuery {
+        public int TotalCount { get; set; }
+        public string Items { get; set; }
+    }
 }

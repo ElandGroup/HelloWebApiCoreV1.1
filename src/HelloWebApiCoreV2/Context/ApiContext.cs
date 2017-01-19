@@ -6,17 +6,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace HelloWebApiCoreV2.Context
 {
-    public class DapperContext
+    public class ApiContext
     {
-        private DapperContext()
+        private ApiContext()
         { }
-        private static DapperContext current;
-        public static DapperContext Current
+        private static ApiContext current;
+        public static ApiContext Current
         {
             get
             {
                 if (current == null)
-                    current = new DapperContext();
+                    current = new ApiContext();
                 return current;
             }
         }

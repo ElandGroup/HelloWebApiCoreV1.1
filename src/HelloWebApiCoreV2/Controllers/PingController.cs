@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HelloWebApiCoreV2.Controllers
 {
-    [Route("api/v2/[controller]")]
+    [Route("[controller]")]
     public class PingController : Controller
     {
         // GET: api/values

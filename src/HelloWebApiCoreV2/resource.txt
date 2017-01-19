@@ -1,0 +1,3 @@
+﻿10001:A required parameter is missing or doesn't have the right format {0}
+10002: internal server error
+10003:The number of queries must be smaller than {0}

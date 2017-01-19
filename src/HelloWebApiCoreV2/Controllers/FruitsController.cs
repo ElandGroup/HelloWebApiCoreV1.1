@@ -7,16 +7,17 @@ using HelloWebApiCoreV2.Models;
 using HelloWebApiCoreV2.Service;
 using Microsoft.AspNetCore.Mvc;
 using HelloWebApiCoreV2.Common.ApiPack;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HelloWebApiCoreV2.Controllers
 {
-    [Route("api/v2/[controller]")]
-    public class FruitController : Controller
+    [Route("v2/[controller]")]
+    public class FruitsController : Controller
     {
         IFruitService _fruitService;
-        public FruitController(IFruitService fruitService)
+        public FruitsController(IFruitService fruitService)
         {
             _fruitService = fruitService;
         }
@@ -24,20 +25,63 @@ namespace HelloWebApiCoreV2.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var fruitDtoList = await _fruitService.FruitQuery();
-            if (fruitDtoList == null)
-                return this.NotFoundEx();
-            return this.OkEx(fruitDtoList);
+            try
+            {
+                int skipCount = string.IsNullOrWhiteSpace(Request.Query["skipCount"]) ? 0 : Convert.ToInt32(Request.Query["skipCount"]);
+                int maxResultCount = string.IsNullOrWhiteSpace(Request.Query["maxResultCount"]) ? 20 : Convert.ToInt32(Request.Query["maxResultCount"]);
+                const int MAXCOUNT = 1000;
+                if (maxResultCount > MAXCOUNT)
+                {
+                    return this.BadRequestEx(new Dictionary<string, object>
+                    {
+                        { "code" , 10004 },
+                        { "message" , $"The number of queries must be smaller than ${MAXCOUNT}"}
+                    });
+                }
+                string sort = Request.Query["sort"];
+                sort = sort ?? "" ;
+                if (sort =="")
+                {
+                    sort = "code asc";
+                }
+                else if (sort.Substring(1, 1) == "-")
+                {
+                    sort = sort.Substring(1)+@" desc";
+                }
+                else {
+                    sort = sort.Substring(0) + @" asc";
+                }
+
+                string fields = Request.Query["fields"];
+
+                var fruitDtoList = await _fruitService.FruitQuery(fields,sort, skipCount, maxResultCount);
+                if (fruitDtoList == null)
+                    return this.NotFoundEx();
+                return this.OkEx(fruitDtoList);
+            }
+            catch (Exception ex)
+            {
+                return this.ErrorEx(ex.Message);
+            }
+        
         }
 
         // GET api/v2/fruit/apple
         [HttpGet("{name}", Name = "GetFruit")]
         public async Task<IActionResult> Get(string name)
         {
-            var fruitDtoList = await _fruitService.FruitQuery(name);
-            if (fruitDtoList == null)
-                return this.NotFoundEx();
-            return this.OkEx(fruitDtoList);
+            try
+            {
+                var fruitDtoList = await _fruitService.FruitQuery(name);
+                if (fruitDtoList == null)
+                    return this.NotFoundEx();
+                return this.OkEx(fruitDtoList);
+            }
+            catch (Exception ex)
+            {
+                return this.ErrorEx(ex.Message);
+            }
+  
         }
 
         // POST api/v2/fruit/list

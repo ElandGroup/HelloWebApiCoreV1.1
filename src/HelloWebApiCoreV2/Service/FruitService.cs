@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Dapper;
 using HelloWebApiCoreV2.Context;
 using HelloWebApiCoreV2.Models;
+using HelloApiWithCoreDapper.Common;
+using Newtonsoft.Json;
+using HelloWebApiCoreV2.Common.ApiPack;
 
 namespace HelloWebApiCoreV2.Service
 {
     public interface IFruitService
     {
-        Task<IEnumerable<FruitDto>> FruitQuery();
+        Task<ApiQuery> FruitQuery(string fields,string sortedColumnint,int skipCount, int maxResultCount);
         Task<FruitDto> FruitQuery(string name);
         void FruitAdd(List<FruitDto> fruitDtoList);
         void FruitUpdate(FruitDto fruitDto);
@@ -19,14 +22,29 @@ namespace HelloWebApiCoreV2.Service
     }
     public class FruitService : IFruitService
     {
-        string connStr = DapperContext.Current
+        string connStr = ApiContext.Current
             .Configuration["Data:DefaultConnection:ConnectionString"];
-        public async Task<IEnumerable<FruitDto>> FruitQuery()
+        private JsonSerializerSettings jsonFormatSettings = new JsonSerializerSettings
         {
-            string sqlText = @"SELECT * FROM  Fruit";
+            MaxDepth = new int?(1),
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore
+        };
+        public async Task<ApiQuery> FruitQuery(string fields,string sortedColumn,int skipCount, int maxResultCount )
+        {
+            string fieldSelect = fields ?? "*";
+            string sql = $"SELECT {fieldSelect} FROM  Fruit";
+            //only if DapperSql2008ResultString
+            maxResultCount = skipCount + maxResultCount;
+            ++skipCount;
+            //end
+            string sqlText = string.Format(PagingHelper.DapperSql2008ResultString,sql, sortedColumn, skipCount,maxResultCount);
             using (var conn = new SqlConnection(connStr))
             {
-                return await conn.QueryAsync<FruitDto>(sqlText);
+                var read= await conn.QueryMultipleAsync(sqlText);
+                IEnumerable<dynamic> result = read.Read();
+                return new ApiQuery { TotalCount = result.Count(), Items = JsonConvert.SerializeObject(result, Formatting.None, jsonFormatSettings) };
+                //  return await Task.Factory.StartNew(()=> JsonConvert.SerializeObject(read.ReadAsync(), Formatting.None, jsonFormatSettings));
             }
         }
 

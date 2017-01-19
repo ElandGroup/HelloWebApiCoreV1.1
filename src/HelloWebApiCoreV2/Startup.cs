@@ -23,7 +23,7 @@ namespace HelloWebApiCoreV2
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            DapperContext.Current.Configuration = builder.Build();
+            ApiContext.Current.Configuration = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -43,7 +43,7 @@ namespace HelloWebApiCoreV2
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(DapperContext.Current.Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(ApiContext.Current.Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             app.UseMvc();

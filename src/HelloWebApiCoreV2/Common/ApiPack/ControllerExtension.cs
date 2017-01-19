@@ -84,7 +84,7 @@ namespace HelloWebApiCoreV2.Common.ApiPack
                 Result = default(T),
                 Error = new Dictionary<string, object>
                 {
-                    { "code" , 10012 },
+                    { "code" , 10001 },
                     { "message" , "A required parameter is missing or doesn't have the right format:" + message}
                     , { "details",null}
                     , {"validationErrors",null }
@@ -100,7 +100,7 @@ namespace HelloWebApiCoreV2.Common.ApiPack
                     Result = default(T),
                     Error = new Dictionary<string, object>
                     {
-                        { "code" , 10003 },
+                        { "code" , 10002 },
                         { "message" , errorMessage}
                         , { "details",null}
                         , {"validationErrors",null }
@@ -112,7 +112,14 @@ namespace HelloWebApiCoreV2.Common.ApiPack
         #endregion
 
         #region Stay
-
+        public static BadRequestObjectResult BadRequestEx(this Controller context, Dictionary<string, object> dicError)
+        {
+            return context.BadRequestEx<string>(dicError);
+        }
+        public static ObjectResult ErrorEx(this Controller context, Dictionary<string, object> dicError)
+        {
+            return context.ErrorEx<string>(dicError);
+        }
         public static BadRequestObjectResult BadRequestEx<T>(this Controller context, Dictionary<string, object> dicError)
         {
             return context.BadRequest(new ApiResult<T>
