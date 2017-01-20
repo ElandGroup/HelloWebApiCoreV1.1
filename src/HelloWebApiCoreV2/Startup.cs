@@ -35,7 +35,7 @@ namespace HelloWebApiCoreV2
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
-                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
             services.Configure<MvcOptions>(options => options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAll")));
         }
