@@ -76,12 +76,12 @@ namespace HelloWebApiCoreV2.Controllers
         }
 
         // GET api/v2/fruit/apple
-        [HttpGet("{name}", Name = "GetFruit")]
-        public async Task<IActionResult> Get(string name)
+        [HttpGet("{code}", Name = "GetFruit")]
+        public async Task<IActionResult> Get(string code)
         {
             try
             {
-                var fruitDtoList = await _fruitService.FruitQuery(name);
+                var fruitDtoList = await _fruitService.FruitQuery(code);
                 if (fruitDtoList == null)
                     return this.NotFoundEx();
                 return this.OkEx(fruitDtoList);

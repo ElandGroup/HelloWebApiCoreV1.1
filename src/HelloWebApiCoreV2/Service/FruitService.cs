@@ -16,10 +16,10 @@ namespace HelloWebApiCoreV2.Service
     public interface IFruitService
     {
         Task<ApiQuery> FruitQuery(string fields, string sortedColumnint, int skipCount, int maxResultCount);
-        Task<FruitDto> FruitQuery(string name);
+        Task<FruitDto> FruitQuery(string code);
         Task FruitAdd(List<FruitDto> fruitDtoList);
         Task FruitUpdate(FruitDto fruitDto);
-        Task FruitDelete(string name);
+        Task FruitDelete(string code);
     }
     public class FruitService : IFruitService
     {
@@ -48,11 +48,11 @@ namespace HelloWebApiCoreV2.Service
 
         }
 
-        public async Task<FruitDto> FruitQuery(string name)
+        public async Task<FruitDto> FruitQuery(string code)
         {
-            string sqlText = "SELECT * FROM Fruit WHERE Name = @Name";
+            string sqlText = "SELECT * FROM Fruit WHERE code = @code";
             SqlConnection conn = await ConnectContext.Current.GetOpenConnection();
-            return (await conn.QueryAsync<FruitDto>(sqlText, new { Name = name })).FirstOrDefault();
+            return (await conn.QueryAsync<FruitDto>(sqlText, new { Code = code })).FirstOrDefault();
 
         }
 
@@ -106,7 +106,7 @@ namespace HelloWebApiCoreV2.Service
 
         }
 
-        public async Task FruitDelete(string name)
+        public async Task FruitDelete(string code)
         {
             string sqlText = @"DELETE Fruit 
                 WHERE Code =@Code";
@@ -117,7 +117,7 @@ namespace HelloWebApiCoreV2.Service
                 {
                     try
                     {
-                        await conn.ExecuteAsync(sqlText, new { Name = name }, tran);
+                        await conn.ExecuteAsync(sqlText, new { Code = code }, tran);
                         tran.Commit();
                     }
                     catch (Exception ex)
