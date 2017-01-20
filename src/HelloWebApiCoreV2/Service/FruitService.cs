@@ -109,7 +109,7 @@ namespace HelloWebApiCoreV2.Service
         public async Task FruitDelete(string name)
         {
             string sqlText = @"DELETE Fruit 
-                WHERE Name =@Name";
+                WHERE Code =@Code";
             using (var conn = new SqlConnection(connStr))
             {
                 conn.Open();

@@ -133,8 +133,8 @@ namespace HelloWebApiCoreV2.Controllers
         }
 
         // PUT api/v2/fruit/apple
-        [HttpPut("{name}")]
-        public async Task<IActionResult> Put(string name, [FromBody]FruitDto fruitDto)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]FruitDto fruitDto)
         {
             try
             {
@@ -143,7 +143,33 @@ namespace HelloWebApiCoreV2.Controllers
                     return this.BadRequestEx("fruitDto");
                 }
 
-                var fruit = _fruitService.FruitQuery(name);
+                //var fruit = _fruitService.FruitQuery(name);
+                //if (fruit == null)
+                //{
+                //    return this.NotFoundEx();
+                //}
+
+                await _fruitService.FruitUpdate(fruitDto);
+                return this.NoContentEx();
+            }
+            catch (Exception ex)
+            {
+                return this.ErrorEx(ex.Message);
+            }
+        }
+
+        // PUT api/v2/fruit/apple
+        [HttpPatch("{code}")]
+        public async Task<IActionResult> Patch(string code,[FromBody]FruitDto fruitDto)
+        {
+            try
+            {
+                if (fruitDto == null)
+                {
+                    return this.BadRequestEx("fruitDto");
+                }
+
+                var fruit = _fruitService.FruitQuery(code);
                 if (fruit == null)
                 {
                     return this.NotFoundEx();
@@ -159,17 +185,17 @@ namespace HelloWebApiCoreV2.Controllers
         }
 
         // DELETE api/v2/fruit/apple
-        [HttpDelete("{name}")]
-        public async Task<IActionResult> Delete(string name)
+        [HttpDelete("{code}")]
+        public async Task<IActionResult> Delete(string code)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(code))
                 {
-                    return this.BadRequestEx("name");
+                    return this.BadRequestEx("code");
                 }
 
-                await _fruitService.FruitDelete(name);
+                await _fruitService.FruitDelete(code);
 
                 return this.NoContentEx();
             }
